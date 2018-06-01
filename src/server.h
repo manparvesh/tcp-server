@@ -5,38 +5,53 @@
 #ifndef TCP_SERVER_SERVER_H
 #define TCP_SERVER_SERVER_H
 
-#include <arpa/inet.h>
-#include <errno.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-
-#include <sys/epoll.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
-#define PORT 8080
-#define BACKLOG 128
+#define VERSION 23
+#define BUFFER_SIZE 8096
+
+#ifndef SIGCLD
+#   define SIGCLD SIGCHLD
+#endif
+
+enum log_type {
+    ERROR = 42,
+    LOG = 44,
+    FORBIDDEN = 403,
+    NOTFOUND = 404
+};
+
+struct {
+    char *extension;
+    char *file_type;
+} extensions[] = {
+        {"gif",  "image/gif"},
+        {"jpg",  "image/jpg"},
+        {"jpeg", "image/jpeg"},
+        {"png",  "image/png"},
+        {"ico",  "image/ico"},
+        {"zip",  "image/zip"},
+        {"gz",   "image/gz"},
+        {"tar",  "image/tar"},
+        {"htm",  "text/html"},
+        {"html", "text/html"},
+        {0,      0}};
+
+void logger(enum log_type type, char *s1, char *s2, int socket_fd);
 
 /**
- * Encapsulates the properties of the server
+ * child web server process so that we can exit on errorss
  * */
-typedef struct server {
-    /**
-     * File descriptor of the socket in passive mode to wait for connections
-     * */
-    int listen_fd;
-} server_t;
-
-/**
- * creates a socket for the server and makes it passive such that we can wait for connections on it later
- * */
-int server_listen(server_t *server);
-
-/**
- * Accepts new connections and then prints `Hello World` to them
- * */
-int server_accept(server_t *server);
+void web(int fd, int hit);
 
 #endif //TCP_SERVER_SERVER_H
