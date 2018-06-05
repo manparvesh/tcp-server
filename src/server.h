@@ -28,7 +28,7 @@ enum log_type {
     ERROR = 42,
     LOG = 44,
     FORBIDDEN = 403,
-    NOTFOUND = 404
+    NOT_FOUND = 404
 };
 
 struct {

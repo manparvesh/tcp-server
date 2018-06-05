@@ -29,7 +29,7 @@ void logger(enum log_type type, char *s1, char *s2, int socket_fd) {
                   271);
             sprintf(log_buffer, "FORBIDDEN: %s:%s", s1, s2);
             break;
-        case NOTFOUND:
+        case NOT_FOUND:
             write(socket_fd,
                   "HTTP/1.1 404 Not Found\n"
                   "Content-Length: 136\n"
@@ -58,7 +58,7 @@ void logger(enum log_type type, char *s1, char *s2, int socket_fd) {
         close(fd);
     }
 
-    if (type == ERROR || type == NOTFOUND || type == FORBIDDEN) {
+    if (type == ERROR || type == NOT_FOUND || type == FORBIDDEN) {
         exit(3);
     }
 }
@@ -139,7 +139,7 @@ void web(int fd, int hit) {
     }
 
     if ((file_fd = open(&buffer[5], O_RDONLY)) == -1) {  /* open the file for reading */
-        logger(NOTFOUND, "failed to open file", &buffer[5], fd);
+        logger(NOT_FOUND, "failed to open file", &buffer[5], fd);
     }
     logger(LOG, "SEND", &buffer[5], hit);
     len = (long) lseek(file_fd, (off_t) 0, SEEK_END); /* lseek to the file end to find the length */
