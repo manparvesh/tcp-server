@@ -1,6 +1,6 @@
-//
-// Created by manparvesh on 30/5/18.
-//
+/*********************************************************
+ *           Created by manparvesh on 30/5/18.
+ *********************************************************/
 
 #ifndef TCP_SERVER_SERVER_H
 #define TCP_SERVER_SERVER_H
@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define VERSION 23
+#define VERSION 1
 #define BUFFER_SIZE 8096
 
 #ifndef SIGCLD
